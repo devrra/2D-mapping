@@ -1,3 +1,11 @@
+'''
+--->to be modified to take input from a .txt file
+bug in it..
+    the (actual)bot will turn to right<R>(say) and then move forward<F>, and accordingly will be the input to the code.
+    
+    the code (at present) will not continue to draw path in rightward direction once it starts getting <F>s after the <R>.     
+'''
+
 import pygame
 from pygame.locals import *
 from OpenGL.GL import *
