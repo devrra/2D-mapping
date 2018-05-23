@@ -63,7 +63,8 @@ def baseMap():
 def bot(i):
     glBegin(GL_QUADS)
     for face in faces:
-        glColor3fv(color[i])
+            glColor3fv(color[i])
+            glVertex2fv(botVertex[face])
     glEnd()
     
     glBegin(GL_LINES)
