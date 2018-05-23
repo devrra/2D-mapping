@@ -11,3 +11,12 @@ bug in it..
     the code (at present) will not continue to draw path in rightward direction once it starts getting <F>s after the <R>.     
 '''
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+branch : pyopen_map_system
+file: map_.py
+bug in it..
+    the (actual)bot will turn to right<R>(say) and then move forward<F>, and accordingly will be the input to the code.
+    
+    the code (at present) will not continue to draw path in rightward direction once it starts getting <F>s after the <R>. 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
