@@ -41,7 +41,7 @@ botEdges = (
 
 faces = ((0, 1, 2, 3))
 
-color = [(1,0,0),(0,1,0),(1,1,0),(1,1,1)]   ## r,g,y,w
+color = [(0,0,0),(0,1,0),(1,1,0),(1,1,1)]   ## r,g,y,w
 
 botCenterPath = [[0, 0]]
 
@@ -76,11 +76,12 @@ def horizontal(i):
     for vertex in botVertex:
         vertex[0] += i/100
     Center = getBotCenter(botVertex)
+    global c
     #print(Center)
     if Center in botCenterPath:
-        global c
         c = 2
-    else:    
+    else:
+        c = 0    
         botCenterPath.append(Center)
         print(Center)
     
@@ -89,11 +90,12 @@ def vertical(i):
     for vertex in botVertex:
         vertex[1] += i/100
     Center = getBotCenter(botVertex)
+    global c
     #print(Center)
     if Center in botCenterPath:
-        global c
         c = 2
-    else:    
+    else:
+        c = 0
         botCenterPath.append(Center)
         print(Center)
 
@@ -144,11 +146,10 @@ def main():
         #glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         baseMap()
         bot(2-c)        ## c =0,2
-        #print(2-c)
-        #print(len(botCenterPath))
         pygame.display.flip()
         pygame.time.wait(100)
-        c = 0
+        #c = 0
+       
         
 
 
