@@ -73,26 +73,14 @@ def bot(i):
             glVertex2fv(botVertex[vertex])
     glEnd()
 
-def horizontal(i):
-    for vertex in botVertex:
-        vertex[0] += i/100
-    Center = getBotCenter(botVertex)
-    global c
-    #print(Center)
-    if Center in botCenterPath:
-        c = 2
-    else:
-        c = 0    
-        botCenterPath.append(Center)
-        print(Center)
-    
+dirSense = 1        ## 0,1
         
-def vertical(i):
+def FB(i):
+    #print(dirSense%2)
     for vertex in botVertex:
-        vertex[1] += i/100
+        vertex[dirSense%2] += i/100
     Center = getBotCenter(botVertex)
     global c
-    #print(Center)
     if Center in botCenterPath:
         c = 2
     else:
@@ -121,57 +109,23 @@ def main():
     glTranslatef(0.0, 0.0, -5)
 
     global c
-    '''
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-                
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    horizontal(-botStep)
-                    
-                if event.key == pygame.K_RIGHT:
-                    horizontal(botStep)
+    global dirSense
 
-                if event.key == pygame.K_UP:
-                    vertical(botStep)
-
-                if event.key == pygame.K_DOWN:
-                    vertical(-botStep)
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 4:
-                    glTranslatef(0,0,-0.1)
-                    
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 5:
-                    glTranslatef(0,0,0.1)
-
-        #glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-        baseMap()
-        bot(2-c)        ## c =0,2
-        pygame.display.flip()
-        pygame.time.wait(100)
-        #c = 0
-    '''
     for n in range(limit):
         if directions[n]=='F':
-            vertical(-botStep)
+            FB(-botStep)
         elif directions[n]=='L':    
-            horizontal(-botStep)
+            dirSense += 1
         elif directions[n]=='R':    
-            horizontal(botStep)
+            dirSense += 1
         elif directions[n]=='B':
-            vertical(botStep)   
+            FB(botStep)   
         #glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         baseMap()
         bot(2-c)        ## c =0,2
         pygame.display.flip()
         pygame.time.wait(100)
-        #c = 0            
-       
+        #c = 0  
         
 main()
 
