@@ -2,6 +2,25 @@ import pygame
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
+from PIL import Image
+import numpy as np
+
+np.set_printoptions(threshold=np.nan)
+
+imagefilepath = 'F:/ROBOTICs/2Dmappin/saved_image.jpg'
+
+
+def saveImg():
+    width, height = 900, 800
+    glPixelStorei(GL_PACK_ALIGNMENT, 1)
+    data = glReadPixelsub(0, 0, width, height, GL_RGB, outputType = None)
+##    imagefile = open(imagefilepath,'w')
+##    imagefile.write(str(data))
+##    imagefile.close()
+##    print(data)
+    image = Image.fromarray(data,'RGB')   ## '1', 'L', 'P', 
+    image.save('F:/ROBOTICs/2Dmappin/test.png')
+    image.show()
 
 pygame.init()
 
@@ -129,8 +148,9 @@ def main():
         baseMap()
         bot(2-c)        ## c =0,2
         pygame.display.flip()
-        pygame.time.wait(300)
+        pygame.time.wait(1)
         #c = 0  
+    saveImg()    
         
 main()
 
