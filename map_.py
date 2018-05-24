@@ -46,6 +46,7 @@ color = [(1,0,0),(0,1,0),(1,1,0),(1,1,1)]   ## r,g,y,w
 botCenterPath = [[0, 0]]
 
 c = 0           ## color shift variable of robot. 
+pointer = 0
 
 
 def baseMap():
@@ -73,12 +74,17 @@ def bot(i):
             glVertex2fv(botVertex[vertex])
     glEnd()
 
-dirSense = 1        ## 0,1
         
-def FB(i):
+def FB(dir):          ## i's purpose changed, now not for botStep. 
     #print(dirSense%2)
+    i = ((-1)**dir)*botStep
+    if dir in [0,1]:
+        a = 1
+    elif dir in [2,3]:
+        a = 0     
+
     for vertex in botVertex:
-        vertex[dirSense%2] += i/100
+        vertex[a] += i/100
     Center = getBotCenter(botVertex)
     global c
     if Center in botCenterPath:
@@ -108,23 +114,22 @@ def main():
 
     glTranslatef(0.0, 0.0, -5)
 
+    direction = [0,2,1,3]       ## {n,e,s,w}
     global c
-    global dirSense
+    global pointer
 
     for n in range(limit):
         if directions[n]=='F':
-            FB(-botStep)
+            FB(direction[pointer%4])
         elif directions[n]=='L':    
-            dirSense += 1
+            pointer -= 1
         elif directions[n]=='R':    
-            dirSense += 1
-        elif directions[n]=='B':
-            FB(botStep)   
+            pointer += 1 
         #glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         baseMap()
         bot(2-c)        ## c =0,2
         pygame.display.flip()
-        pygame.time.wait(100)
+        pygame.time.wait(300)
         #c = 0  
         
 main()
