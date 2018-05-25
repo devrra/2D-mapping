@@ -1,9 +1,7 @@
 '''
---->to be modified to take input from a .txt file
-bug in it..
-    the (actual)bot will turn to right<R>(say) and then move forward<F>, and accordingly will be the input to the code.
-    
-    the code (at present) will not continue to draw path in rightward direction once it starts getting <F>s after the <R>.     
+opens an instruction file.
+moves bot(yellow square) accordingly on pygame window
+saves the last frame of the window as JPEG.
 '''
 
 import pygame
@@ -50,17 +48,20 @@ botEdges = (
     (3, 0)
     )
 
-faces = ((0, 1, 2, 3))
+faces = ((0, 1, 2, 3))              ## face of yellow square representing bot.
 
 color = [(1,0,0),(0,1,0),(1,1,0),(1,1,1)]   ## r,g,y,w
 
 botCenterPath = [[0, 0]]
 
-c = 0           ## color shift variable of robot. 
-pointer = 0
+c = 0           ## responsible for changing bot to red on retraced path. 
+pointer = 0     ## index pointer to the list :direction=[0,2,1,3]
 
 
 def baseMap():
+    '''
+    to draw a white square representing map area. 
+    '''
     glBegin(GL_QUADS)
     for face in faces:
         glColor3fv(color[3])
@@ -73,6 +74,9 @@ def baseMap():
     glEnd()
 
 def bot(i):
+    '''
+    to draw a yellow square representing map area. 
+    '''
     glBegin(GL_QUADS)
     for face in faces:
             glColor3fv(color[i])
@@ -86,8 +90,12 @@ def bot(i):
     glEnd()
 
         
-def FB(dir):          ## i's purpose changed, now not for botStep. 
-    #print(dirSense%2)
+def FB(dir):         
+    '''
+    to move the bot in proper direction.
+        this properly maps from <dir>('R','F','L')------->{n,e,s,w}
+        and sets the vertex of the bot(yellow square)
+    '''
     i = ((-1)**dir)*botStep
     if dir in [0,1]:
         a = 1
@@ -103,30 +111,27 @@ def FB(dir):          ## i's purpose changed, now not for botStep.
     else:
         c = 0
         botCenterPath.append(Center)
-        print(Center)
+        #print(Center)
 
-def getBotCenter(botVertices):   
-    #print(botVertices)      
+def getBotCenter(botVertices):         
     x =  (int((botVertices[0][0]+botVertices[1][0]+0.0005)*100))//2
     y =  (int((botVertices[0][1]+botVertices[3][1]+0.0005)*100))//2 
     return [x,y]  
 
-file = open('F:/projects/ROBOTICs/2Dmappin/directions.txt','r')
+file = open('F:/projects/ROBOTICs/2Dmappin/directions.txt','r')         ## instruction file.
 directions = file.read()
 limit = len(directions)
 
 
 def main():
-    #pygame.init()
     display = (900,800)
     pygame.display.set_mode(display, pygame.DOUBLEBUF|pygame.OPENGL)
 
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
-
     glTranslatef(0.0, 0.0, -5)
 
     direction = [0,2,1,3]       ## {n,e,s,w}
-    global c
+    global c                    ## responsible for changing bot to red on retraced path.
     global pointer
 
     for n in range(limit):
