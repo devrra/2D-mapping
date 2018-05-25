@@ -4,23 +4,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from PIL import Image
 import numpy as np
-
-np.set_printoptions(threshold=np.nan)
-
-imagefilepath = 'F:/ROBOTICs/2Dmappin/saved_image.jpg'
-
-
-def saveImg():
-    width, height = 900, 800
-    glPixelStorei(GL_PACK_ALIGNMENT, 1)
-    data = glReadPixelsub(0, 0, width, height, GL_RGB, outputType = None)
-##    imagefile = open(imagefilepath,'w')
-##    imagefile.write(str(data))
-##    imagefile.close()
-##    print(data)
-    image = Image.fromarray(data,'RGB')   ## '1', 'L', 'P', 
-    image.save('F:/ROBOTICs/2Dmappin/test.png')
-    image.show()
+import time
 
 pygame.init()
 
@@ -119,7 +103,7 @@ def getBotCenter(botVertices):
     y =  (int((botVertices[0][1]+botVertices[3][1]+0.0005)*100))//2 
     return [x,y]  
 
-file = open('F:/ROBOTICs/2Dmappin/directions.txt','r')
+file = open('F:/projects/ROBOTICs/2Dmappin/directions.txt','r')
 directions = file.read()
 limit = len(directions)
 
@@ -127,7 +111,7 @@ limit = len(directions)
 def main():
     #pygame.init()
     display = (900,800)
-    pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
+    pygame.display.set_mode(display, pygame.DOUBLEBUF|pygame.OPENGL)
 
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
 
@@ -149,8 +133,8 @@ def main():
         bot(2-c)        ## c =0,2
         pygame.display.flip()
         pygame.time.wait(1)
-        #c = 0  
-    saveImg()    
+        finalSurface = pygame.display.get_surface()                  
+    pygame.image.save(finalSurface, 'F:/projects/ROBOTICs/2Dmappin/test.png')  
         
 main()
 
