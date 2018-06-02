@@ -13,3 +13,17 @@ bug in it..
 BUG FIXED.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+branch: master
+file: solveTheMaze.py
+
+'''
+--->
+    Traceback (most recent call last):
+  File ".\solveTheMaze.py", line 96, in <module>
+    removeLoops()
+  File ".\solveTheMaze.py", line 64, in removeLoops
+    if pathCovered[m].pos == pathCovered[n].pos:
+  IndexError: list index out of range
+  
+  main culprit: del pathCovered[[n+1:m]
+'''
