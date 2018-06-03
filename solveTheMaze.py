@@ -23,13 +23,13 @@ class botStatus:
         self.head = head
     
     def altPos(self):       ## called when 'F' is read.
-        newStatus = botStatus(self.pos, self.head)
+        newStatus = botStatus(self.pos[:], self.head[:])
         newStatus.pos[0] += self.head[0]
         newStatus.pos[1] += self.head[1]
         pathCovered.append(newStatus)
 
     def altHead(self, side):        ## side = 'R', 'L'
-        newStatus = botStatus(self.pos, self.head)
+        newStatus = botStatus(self.pos[:], self.head[:])
         if self.head[0] != 0:
             if side == 'L':
                 newStatus.head = self.head[::-1]
@@ -52,20 +52,37 @@ def getPathStatus():
     for n in range(limit):
         if directions[n]=='F':
             pathCovered[-1].altPos()
+        elif directions[n] in ['R','L']:
+            pathCovered[-1].altHead(directions[n])
         else:
-            pathCovered[-1].altHead(directions[n]) 
-        pathCovered[-1].show()     
+            continue     
+        #pathCovered[-1].show()     
 
+loopCache = []
 def removeLoops():
+    n,jump = 0,1
     length = len(pathCovered)
-    print(length)
-    for n in range(length):
-        for m in range(length-1, n, -1):
+    print('old pathCovered length : '+str(length))
+##    for n in range(0,length,jump):
+    while n<length:    
+        for m in range(length-1, n+4, -1):
             if pathCovered[m].pos == pathCovered[n].pos:
-                del pathCovered[n+1:m]
-                length = len(pathCovered)
-                print(length)
-            print(0)    
+                #print(pathCovered[m].pos, pathCovered[n].pos, (n,m))
+                loopCache.append([n,m])
+                jump = m-n-1
+                break
+            else:
+                jump = 1
+        n += jump    
+    deleteLoop()
+    print('new pathCovered length : '+str(len(pathCovered)))       
+
+def deleteLoop():
+    diff = 0
+    for duplet in loopCache:
+        del pathCovered[duplet[0]-diff:duplet[1]-diff]
+        diff = duplet[1]-duplet[0]
+
 
 def decideSide(init, final):
     if init[0] :
@@ -95,5 +112,6 @@ if __name__ == '__main__':
     getPathStatus()
     removeLoops()
     solvePath()
-
-
+    for i in range(len(loopCache)):
+        print(loopCache[i])
+    print('loopcache ..done')
