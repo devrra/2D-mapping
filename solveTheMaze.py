@@ -67,6 +67,8 @@ pathCovered = [origin]
 priority = 1
 nodeList = []
 mother = None
+
+solutionPos = []
   
 def getPathStatus():
     '''
@@ -78,25 +80,52 @@ def getPathStatus():
         elif directions[n] in ['R','L']:
             pathCovered[-1].altHead(directions[n])     
 
+def buildTree():
+    global priority
+    for n in range(1, len(pathCovered)-1):       ## to create the Tree
+        if pathCovered[n].head != pathCovered[n+1].head:
+            newNode = Tree(pathCovered[n].pos, priority)
+            mother.insertChild(newNode)
+            priority += 1
+
 def TravelTree(tree):
     if tree:
         print(tree.pos)
         for child in tree.children:
             TravelTree(child)
 
+def solveTree(tree):
+    ## in presentNode, find Child that has highest prority.
+    ## append the presentNode.pos in a list, 
+    ## make Child the presentNode.
+    ## REPEAT.
+    presentNode = tree
+    if len(presentNode.children) != 0:
+        k, m = 0, -1
+        for i in range(len(presentNode.children)):
+            if presentNode.children[i].priority > m:
+                m = presentNode.children[i].priority
+                k = i
+        Child = presentNode.children[k]
+        solutionPos.append(presentNode.pos[:])
+        solveTree(Child)
+    else:
+        solutionPos.append(presentNode.pos[:])
+        return None    
+        
+
 if __name__ == '__main__':
     getPathStatus()
+    
     start = Tree(pathCovered[0].pos, 0)
     mother = start
     nodeList.append(mother)
-    for n in range(1, len(pathCovered)-1):       ##to create the Tree
-        if pathCovered[n].head != pathCovered[n+1].head:
-            newNode = Tree(pathCovered[n].pos, priority)
-            mother.insertChild(newNode)
-            priority += 1
     
-    for i in range(len(nodeList)):
-        print(nodeList[i].pos, nodeList[i].priority, len(nodeList[i].children))
+    buildTree()
+    solveTree(start)
+
+    for i in range(len(solutionPos)):
+        print(solutionPos[i])
 
     '''
     TravelTree(start)'''
