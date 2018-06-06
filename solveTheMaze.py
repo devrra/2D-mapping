@@ -3,12 +3,6 @@ this program will generate FLR code of the solution path.
 it takes input from ('directions.txt') 
 and writes a file ('solutionPath.txt') 
 '''
-import numpy as np
-
-
-inputFile = open('directions.txt','r')
-directions = inputFile.read()
-limit = len(directions)
 
 class botStatus:
     '''
@@ -45,73 +39,64 @@ class botStatus:
     def show(self):
         print([self.pos, self.head])
 
-origin = botStatus([0,0],[0,1])
-pathCovered = [origin]      
+class Tree:
+    def __init__(self, pos, priority):
+        self.pos = pos
+        self.priority = priority
+        self.children = []
 
+    def show(self):
+        print(self.pos, self.priority) 
+
+    def insertChild(self, newNode):
+        global mother
+        if newNode.pos not in [nodeList[i].pos for i in range(len(nodeList))]:
+            self.children.append(newNode)
+            nodeList.append(newNode)
+            mother = newNode
+        else:
+            mother = [nodeList[i] for i in range(len(nodeList)) if nodeList[i].pos == newNode.pos][0]           
+
+inputFile = open('directions.txt','r')
+directions = inputFile.read()
+limit = len(directions)
+
+origin = botStatus([0,0],[0,1])
+pathCovered = [origin]    
+
+priority = 1
+nodeList = []
+mother = None
+  
 def getPathStatus():
+    '''
+    this generates the pathCovered list.
+    '''
     for n in range(limit):
         if directions[n]=='F':
             pathCovered[-1].altPos()
         elif directions[n] in ['R','L']:
-            pathCovered[-1].altHead(directions[n])
-        else:
-            continue     
-        #pathCovered[-1].show()     
+            pathCovered[-1].altHead(directions[n])     
 
-loopCache = []
-def removeLoops():
-    n,jump = 0,1
-    length = len(pathCovered)
-    print('old pathCovered length : '+str(length))
-##    for n in range(0,length,jump):
-    while n<length:    
-        for m in range(length-1, n+4, -1):
-            if pathCovered[m].pos == pathCovered[n].pos:
-                #print(pathCovered[m].pos, pathCovered[n].pos, (n,m))
-                loopCache.append([n,m])
-                jump = m-n-1
-                break
-            else:
-                jump = 1
-        n += jump    
-    deleteLoop()
-    print('new pathCovered length : '+str(len(pathCovered)))       
-
-def deleteLoop():
-    diff = 0
-    for duplet in loopCache:
-        del pathCovered[duplet[0]-diff:duplet[1]-diff]
-        diff = duplet[1]-duplet[0]
-
-
-def decideSide(init, final):
-    if init[0] :
-        if (init[0]+final[1]):
-            return 'L'
-        else:
-            return 'R'
-    else:
-        if (init[1]+final[0]):
-            return 'R'
-        else:
-            return 'L'
-
-def solvePath():
-    solutionFile = open('SolutionPath.txt','a')
-    length = len(pathCovered)
-    for i in range(length-1):
-        if pathCovered[i].pos != pathCovered[i+1].pos :
-            solutionFile.write('    F')
-        elif pathCovered[i].head != pathCovered[i+1].head :   
-            side = decideSide(pathCovered[i].head, pathCovered[i+1].head) 
-            solutionFile.write('    ' + side)
-    solutionFile.close()
-    print('Sol file closed')
+def TravelTree(tree):
+    if tree:
+        print(tree.pos)
+        for child in tree.children:
+            TravelTree(child)
 
 if __name__ == '__main__':
     getPathStatus()
-    removeLoops()
-    solvePath()
-    for i in range(len(loopCache)):
-        print(loopCache[i])
-    print('loopcache ..done')
+    start = Tree(pathCovered[0].pos, 0)
+    mother = start
+    nodeList.append(mother)
+    for n in range(1, len(pathCovered)-1):       ##to create the Tree
+        if pathCovered[n].head != pathCovered[n+1].head:
+            newNode = Tree(pathCovered[n].pos, priority)
+            mother.insertChild(newNode)
+            priority += 1
+    
+    for i in range(len(nodeList)):
+        print(nodeList[i].pos, nodeList[i].priority, len(nodeList[i].children))
+
+    '''
+    TravelTree(start)'''
