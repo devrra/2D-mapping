@@ -26,4 +26,5 @@ file: solveTheMaze.py
   IndexError: list index out of range
   
   main culprit: del pathCovered[[n+1:m]
+  BUG FIXED.
 '''
