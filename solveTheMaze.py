@@ -154,13 +154,6 @@ def generateDirs():
             solutionDir.append('F')
             steps -= 1        
 
-                    
-
-
-
-    
-        
-
 if __name__ == '__main__':
     getPathStatus()
     
