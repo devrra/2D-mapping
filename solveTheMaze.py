@@ -57,7 +57,7 @@ class Tree:
         else:
             mother = [nodeList[i] for i in range(len(nodeList)) if nodeList[i].pos == newNode.pos][0]           
 
-inputFile = open('directions.txt','r')
+inputFile = open('directions2.txt','r')
 directions = inputFile.read()
 limit = len(directions)
 
@@ -69,6 +69,8 @@ nodeList = []
 mother = None
 
 solutionPos = []
+currentHead = [0,1]
+solutionDir = []
   
 def getPathStatus():
     '''
@@ -112,6 +114,51 @@ def solveTree(tree):
     else:
         solutionPos.append(presentNode.pos[:])
         return None    
+
+def changeHead(reqHead):
+    global currentHead
+    if reqHead != currentHead:
+        a, b = 0, 0
+        l = [[1,0],[0,1],[-1,0],[0,-1]]
+        for i in range(len(l)):
+            if l[i] == currentHead:
+                a = i
+            if l[i] == reqHead:
+                b = i
+        n = 10*a+b
+        if n in [10, 21, 32, 3]:
+            solutionDir.append('R')
+        elif n in [30, 1, 12, 23]:
+            solutionDir.append('L') 
+        elif n in [20, 31, 2, 13]:
+            solutionDir.append('R')                    
+            solutionDir.append('R')
+        currentHead = reqHead    
+
+def generateDirs():
+    for i in range(len(solutionPos)-1):
+        displacement = [
+                        (solutionPos[i+1][0]-solutionPos[i][0]),
+                        (solutionPos[i+1][1]-solutionPos[i][1])
+                        ]
+        reqHead = []
+        steps = 0
+        for i in displacement:
+            if i == 0:
+                reqHead.append(i)
+            else:
+                reqHead.append(i/abs(i))
+                steps = abs(i)
+        changeHead(reqHead)
+        while steps:
+            solutionDir.append('F')
+            steps -= 1        
+
+                    
+
+
+
+    
         
 
 if __name__ == '__main__':
@@ -122,10 +169,10 @@ if __name__ == '__main__':
     nodeList.append(mother)
     
     buildTree()
+    #TravelTree(start)
     solveTree(start)
+    generateDirs()
 
-    for i in range(len(solutionPos)):
-        print(solutionPos[i])
-
-    '''
-    TravelTree(start)'''
+    file = open('SolutionPath.txt', 'w')
+    for i in range(len(solutionDir)):
+        file.write('    '+solutionDir[i])
