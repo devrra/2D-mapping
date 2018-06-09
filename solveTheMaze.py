@@ -1,12 +1,13 @@
 '''
 this program will generate FLR code of the solution path.
-it takes input from ('directions.txt') 
-and writes a file ('solutionPath.txt') 
+it takes input from ('problem.txt') 
+and writes a file ('Solution.txt') 
 '''
 
 class botStatus:
     '''
     status = information of position and direction(the bot is facing)
+    at once only one of head or pos can be altered. 
 
     '''
     def __init__(self, pos, head):  
@@ -17,12 +18,26 @@ class botStatus:
         self.head = head
     
     def altPos(self):       ## called when 'F' is read.
+        '''
+        creat a new botStatus object 
+        initialise with prevStatus data
+        update pos of newer one according to prevStatus.head data
+        here, newStatus.head == prevStatus.head
+        then, appended to pathCovered
+        '''
         newStatus = botStatus(self.pos[:], self.head[:])
         newStatus.pos[0] += self.head[0]
         newStatus.pos[1] += self.head[1]
         pathCovered.append(newStatus)
 
     def altHead(self, side):        ## side = 'R', 'L'
+        '''
+        create a new botStatus object
+        initialise with prevStatus data
+        newStatus.head is set according to "R,L" and prevStatus.head
+        here, newStatus.pos == prevStatus.pos
+        then, appended to pathCovered
+        '''
         newStatus = botStatus(self.pos[:], self.head[:])
         if self.head[0] != 0:
             if side == 'L':
@@ -40,6 +55,9 @@ class botStatus:
         print([self.pos, self.head])
 
 class Tree:
+    '''
+    priority -- used to select the correct node when presentNode has more than one children. 
+    '''
     def __init__(self, pos, priority):
         self.pos = pos
         self.priority = priority
@@ -57,7 +75,7 @@ class Tree:
         else:
             mother = [nodeList[i] for i in range(len(nodeList)) if nodeList[i].pos == newNode.pos][0]           
 
-inputFile = open('directions2.txt','r')
+inputFile = open('problem.txt','r')
 directions = inputFile.read()
 limit = len(directions)
 
@@ -68,9 +86,9 @@ priority = 1
 nodeList = []
 mother = None
 
-solutionPos = []
-currentHead = [0,1]
-solutionDir = []
+solutionPos = []    ## list of coordinates of node solution path 
+currentHead = [0,1] 
+solutionDir = []    ## FLR sequence
   
 def getPathStatus():
     '''
@@ -83,6 +101,9 @@ def getPathStatus():
             pathCovered[-1].altHead(directions[n])     
 
 def buildTree():
+    '''
+    mother enables to add another child(afterwards) to an old node, otherwise the tree would become a linked list
+    '''
     global priority
     for n in range(1, len(pathCovered)-1):       ## to create the Tree
         if pathCovered[n].head != pathCovered[n+1].head:
@@ -116,6 +137,10 @@ def solveTree(tree):
         return None    
 
 def changeHead(reqHead):
+    '''
+    first append R or L appropriatly.
+    and the updates cuurentHead to reqHead
+    '''
     global currentHead
     if reqHead != currentHead:
         a, b = 0, 0
@@ -157,7 +182,7 @@ def generateDirs():
 if __name__ == '__main__':
     getPathStatus()
     
-    start = Tree(pathCovered[0].pos, 0)
+    start = Tree(pathCovered[0].pos, 0)     ## creating the first node at origin
     mother = start
     nodeList.append(mother)
     
@@ -166,6 +191,6 @@ if __name__ == '__main__':
     solveTree(start)
     generateDirs()
 
-    file = open('SolutionPath.txt', 'w')
+    file = open('Solution.txt', 'w')
     for i in range(len(solutionDir)):
         file.write('    '+solutionDir[i])
