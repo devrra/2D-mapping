@@ -212,3 +212,5 @@ dist=0.00delay=1Angulardisplacementwrtstartedposition (deg)X =-0.00 Y=-0.00 Z=0.
 dist=0.00delay=1Angulardisplacementwrtstartedposition (deg)X =-0.00 Y=-0.00 Z=0.00 Present=-91 Past=-91distance=89.27X=-0.01
 dist=0.00delay=1Angulardisplacementwrtstartedposition (deg)X =-0.00 Y=-0.00 Z=0.00 Present=-84 Past=-91distance=89.68X=-0.00
 dist=0.00delay=1Angulardisplacementwrtstartedposition (deg)X =-0.00 Y=-0.00 Z=0.00
+
+#####n ajfj
