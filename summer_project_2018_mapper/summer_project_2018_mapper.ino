@@ -1,7 +1,6 @@
 #include <SoftwareSerial.h>
 SoftwareSerial ArduinoUno(13,12);
 //mazerunner
-
 int ipmd1=3 ,ipmd2=2,ipmd3=4,ipmd4=5,trig1=8,echo1=9,trig2=6,echo2=7,trig3=11,echo3=10;
 //us1=front,us2=right,us3=left
 void setup(){
