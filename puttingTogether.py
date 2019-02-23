@@ -1,16 +1,22 @@
+"""
+*Author List 		: Yash Raj
+*Filename			: puttingTogether.py
+*Functions 			: header(), caliberate(), on_connect(), on_message(), main()
+*Global Variables	: display, mapDisplay, ax, ay, vx_, vy_, x_, y_, pastTime, presentTime, oldOmega_z, old_ax_, old_ay_, 
+                      old_vx_, old_vy_, theta_z, symbol  
+"""
+
 import paho.mqtt.client as mqtt
-
-##--------------------------- MAP DEFINATIONS --------------------
-
+from math import *
+import random
+import time
+import os
+##imports for mapping
 import pygame
 from pygame.locals import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *
-from math import *
-import random
-import time
-import os
 #import timeit
 ##import csv
 
@@ -41,6 +47,7 @@ theta_z = 0.0
 symbol = '*'
 
 #toDebug
+#storing data in text format.
 inputPath = 'C:/Users/user/Desktop/omega_z.txt'
 outPath = 'C:/Users/user/Desktop/theta_z.txt'
 
