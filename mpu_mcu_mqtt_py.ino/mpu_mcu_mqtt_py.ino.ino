@@ -1,9 +1,19 @@
-#include <ESP8266WiFi.h>   // Library for using the NodeMCU 
+/*
+*Author(s) 		    : Pradymna Gupta, Yash Raj
+*Functions 			  : setup_wifi, reconnect, setup, loop, I2C_Write, Read_RawValue, MPU6050_Init
+*Global Variables	: ssid, password, mqtt_server, MPU6050SlaveAddress, scl, sda, AccelScaleFactor, GyroScaleFactor,
+                    AccelX, AccelY, AccelZ, Temperature, GyroX, GyroY, GyroZ, timePast, timePresent, gyroXCalli, 
+                    gyroYCalli, gyroZCalli, AccelCalli, velocityPresent, velocityPast, Ax, Ay, Az, T, Gx, Gy, Gz
+                    GyroXPast, GyroYPast, GyroZPast, angleX, angleY, angleZ, distance
+*/
+
+#include <ESP8266WiFi.h>    // Library for using the NodeMCU 
 #include <PubSubClient.h>   // Library for using the Network protcall MQTT in this case
-#include <Wire.h>   // lib for communication.
-#include "ArduinoJson.h"
+#include <Wire.h>           // lib for communication.
+#include "ArduinoJson.h"      
 
 /************************* WiFi Access Point *********************************/
+
 
 const char* ssid = "will"; // Add your SSID
 const char* password = "12345678"; // The PassWord (Wireless Key)
